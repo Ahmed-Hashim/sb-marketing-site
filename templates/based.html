@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+{% load i18n %}
+<html>
+  <head>
+    {% load static %}
+    {% load sweetify %}
+    {% sweetify %}
+    <!-- Basic Page Info -->
+    <meta charset="utf-8" />
+    <title>Al-Mazadi - Marketing Admin Dashboard</title>
+    <script src="{% static 'scripts/htmx.min.js'%}"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+    <!-- Site favicon -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Cairo"
+      rel="stylesheet"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="{% static 'images/almazadi/logo2.png'%}"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="{% static 'images/almazadi/logo2.png'%}"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="{% static 'images/almazadi/logo2.png'%}"
+    />
+    <script src="{% static 'styles/fontawesome.js' %}"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'styles/mycss.css' %}"
+    />
+    
+    {% block css %} {% endblock css %}
+  </head>
+
+  <body class="header-dark" hx-ext="ws" ws-connect="/ws/notifications/">
+    
+    <!--
+    <div class="pre-loader">
+      <div class="pre-loader-box">
+        <div class="loader-logo">
+          <img src="{% static 'images/almazadi/logo2.png'%}" alt="" />
+        </div>
+        <div class="loader-progress" id="progress_div">
+          <div class="bar" id="bar1"></div>
+        </div>
+        <div class="percent" id="percent1">0%</div>
+        <div class="loading-text">Loading...</div>
+      </div>
+    </div>
+-->
+    {% include 'header.html' %} {% include 'leftnav.html' %}
+
+    <div
+      class="toast-container position-fixed bottom-0 end-0 p-3"
+      style="z-index: 11"
+    >
+      <div
+        id="toast"
+        class="toast align-items-center text-white border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <div class="d-flex">
+          <div id="toast-body" class="toast-body"></div>
+        </div>
+      </div>
+    </div>
+    
+    {% block body %} {% endblock body %}
+
+    <div class="footer-wrap pd-20 mb-20 card-box">
+      Al-Mazadi Marketing Tool
+      <a href="https://almazadi.com" target="_blank">Al-Mazadi.com</a>
+    </div>
+    {{request.user.username|json_script:"json-message-username"}}
+		<!-- js -->
+		<script src="{% static 'scripts/status.js' %}"></script>
+    {% block js %} {% endblock js %}
+  </body>
+</html>

@@ -1,0 +1,61 @@
+{% load static %}
+
+<div class="user-notification">
+  <div class="dropdown">
+    <a
+      class="dropdown-toggle no-arrow"
+      href="#"
+      role="button"
+      data-bs-toggle="dropdown"
+    >
+      <i class="icon-copy dw dw-notification"></i>
+    </a>
+    <div class="dropdown-menu dropdown-menu-right" id="droptarget">
+      <div class="notification-mada mx-h-350 customscroll">
+        <ul
+        >
+        {% if notifications %}
+          
+        
+          {% for notification in notifications %}
+          <li class="bg-light mb-1">
+            <div>
+              <a href="{{notification.post.fblink}}" target="_blank">
+                {% if notification.post.imagelink %}
+                <img src="{{notification.post.imagelink.url}}" alt="" />
+                {% else %}
+                <img src="{{notification.post.link}}" alt="" />
+                {% endif %}
+              </a>
+              <h3>
+                <span class="badge bg-secondary mr-2">by</span
+                >{{notification.post.scheduled_by.profile.fullname}}
+              </h3>
+              <p>{{notification.post.message}}</p>
+              <small
+                >{{notification.post.published_date}}<h1 style="color:black;">you dont have new notifications!</h1>
+                <a
+                    
+                  hx-post="{% url 'remove_notification' notification.id %}"
+                  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                  hx-target="droptarget"
+                  class="btn btn-sm btn-primary ml-5"
+                  ><i class="fa-regular fa-eye"></i
+                ></a>
+                <button class="btn btn-sm btn-danger">
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                </button>
+              </small>
+              <span class="badge bg-primary">Facebook</span>
+            </div>
+          </li>
+          
+          {% endfor %}
+          {% else %}
+          
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

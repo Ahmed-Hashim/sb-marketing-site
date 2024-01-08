@@ -1,0 +1,40 @@
+<div class="notification-mada mx-h-350 customscroll"  id="notification-mada" hx-swap-oob="afterbegin">
+    <ul>
+      <li class="bg-light mb-1">
+        <div>
+          <a href="{{fblink}}" target="_blank">
+            {% if thumbnail %}
+            <img src="{{thumbnail}}" alt="" />
+            {% else %}
+            <img
+              src="https://almazadi-marketing.com/media/images/designs/thumb-816x460-a0cd880e19b04bfbfaaa37b23d767987.png"
+              alt=""
+            />
+            {% endif %}
+          </a>
+          <h3>
+            <span class="badge bg-secondary mr-2"> POST by</span
+            >{{scheduled_by}}
+          </h3>
+          <p>{{message}}</p>
+          <small>{{published_date}} </small>
+          <a hx-post="{% url 'remove_notification' id %}"
+                  
+                  class="btn btn-sm btn-primary ml-5"
+                  ><i class="fa-regular fa-eye"></i
+                ></a>
+                <button class="btn btn-sm btn-danger"
+                hx-post="{% url 'remove_notification' id %}"
+                
+                hx-target="droptarget">
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                </button>
+          {% if fblink %}
+          <span class="badge bg-primary">Facebook</span>
+          {% endif %} {% if category %}
+          <span class="badge bg-info">{{category}}</span>
+          {% endif %}
+        </div>
+      </li>
+    </ul>
+  </div>

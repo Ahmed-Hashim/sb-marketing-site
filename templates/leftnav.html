@@ -1,0 +1,67 @@
+{% load  static %}
+{% load i18n %}
+<div class="left-side-bar">
+    <div class="brand-logo">
+        <a href="{% url 'dashboard'%}">
+            <img src="{%static 'images/almazadi/newlogo2.png'%}" alt="" class="dark-logo">
+            <img src="{%static 'images/almazadi/newlogo2.png'%}" alt="" class="light-logo">
+        </a>
+        <div class="close-sidebar" data-toggle="left-sidebar-close">
+            <i class="ion-close-round"></i>
+        </div>
+    </div>
+    <div class="menu-block customscroll">
+        <div class="sidebar-menu">
+            <ul id="accordion-menu">
+                <li>
+                    <a href="{% url 'dashboard'%}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw fi-home"></span><span class="mtext">{% trans "Dashboard"%}</span>
+                    </a>
+                </li>
+
+                <li class="dropdown">
+                    <a href="javascript:;" class="dropdown-toggle">
+                        <span class="micon dw dw-edit2"></span><span class="mtext">{% trans "Posts"%}</span>
+                    </a>
+                    <ul class="submenu">
+                        <li><a href="{% url 'published' %}">{% trans "Published Posts"%}</a></li>
+                        <li><a href="{% url 'unpublished' %}">{% trans "UnPublished Posts"%}</a></li>
+                        <li><a href="{% url 'create_post' %}">{% trans "Create Posts"%}</a></li>
+                        <li><a href="{% url 'schedule_posts' %}">{% trans "Scheduled Posts"%}</a></li>
+                        <li><a href="{% url 'get_posts' %}">{% trans "Get Products"%}</a></li>
+
+
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="javascript:;" class="dropdown-toggle">
+                        <span class="micon icon-copy dw dw-id-card2"></span><span class="mtext">{% trans "CRM"%}</span>
+                    </a>
+                    <ul class="submenu">
+                        <li><a href="{% url 'crm_list' %}">{% trans "Customer list"%}</a></li>
+                        <li><a href="{% url 'whatsapp_settings' %}">{% trans "Whats app Settings"%}</a></li>
+
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="javascript:;" class="dropdown-toggle">
+                        <span class="micon icon-copy ion-ios-briefcase"></span><span class="mtext">{% trans "Products"%}</span>
+                    </a>
+                    <ul class="submenu">
+                        <li><a href="{% url 'product_crud' %}">{% trans "Product List"%}</a></li>
+                        <li><a href="{% url 'invoice_crud' %}">{% trans "Invoices"%}</a></li>
+                        <li><a href="{% url 'expiry_products' %}">{% trans "Expired Products"%}</a></li>
+
+                    </ul>
+                </li>
+                <div style="margin-top:200px; margin-bottom: 0; position: relative;">
+                
+            </div>
+        </div>
+    </div>
+
+
+            
+
+</div>
+<div class="mobile-menu-overlay"></div>

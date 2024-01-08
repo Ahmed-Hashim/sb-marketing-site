@@ -1,0 +1,80 @@
+<div class="user-notification" >
+  <div class="dropdown">
+    <a class="dropdown-toggle no-arrow" role="button" data-toggle="dropdown">
+      <i class="icon-copy dw dw-notification"></i>
+      {% if notifications %}
+        <span class="badge" style="background-color: transparent !important;"><div style="background-color: darkred; width: 15px; height: 15px; border-radius: 50%; display: flex; justify-content: center;
+          align-items: center; color: white; font-weight: bold; font-size: 11px;" id="notification-number">{{notifications.count}}</div></span>
+        
+      {% else %}
+      <span class="badge" style="background-color: transparent !important;"><div style="background-color: darkred; width: 15px; height: 15px; border-radius: 50%; display: flex; justify-content: center;
+        align-items: center; color: white; font-weight: bold; font-size: 13px;" id="notification-number">0</div></span>
+      {% endif %}
+    </a>
+    <div class="dropdown-menu dropdown-menu-right">
+      <div class="notification-mada mx-h-350 customscroll" >
+        <div id="notification-mada">
+        <ul>
+          {% if notifications %}
+          
+          {% for notification in notifications %}
+          <li class="bg-light mb-1">
+            <div>
+              <a href="{{notification.post.fblink}}" target="_blank">
+                {% if notification.post.link %}
+                <img src="{{notification.post.link}}" alt="" />
+                {% else %}
+                <img
+                  src="https://almazadi-marketing.com/media/images/designs/thumb-816x460-a0cd880e19b04bfbfaaa37b23d767987.png"
+                  alt=""
+                />
+                {% endif %}
+              </a>
+              <h3>
+                <span class="badge bg-secondary mr-2"> POST by</span
+                >{{notification.post.scheduled_by.profile.fullname}}
+              </h3>
+              <p>{{notification.post.message}}</p>
+              <small>{{notification.post.published_date}} </small>
+              <a
+                href="#"
+                hx-post="{% url 'remove_notification' notification.id %}"
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                class="btn btn-sm btn-primary ml-5"
+                ><i class="fa-regular fa-eye"></i
+              ></a>
+              <button
+                class="btn btn-sm btn-danger"
+                hx-post="{% url 'remove_notification' notification.id %}"
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                hx-target="droptarget"
+              >
+                <i class="fa-solid fa-triangle-exclamation"></i>
+              </button>
+              {% if notification.post.fblink %}
+              <span class="badge bg-primary">Facebook</span>
+              {% endif %} {% if notification.post.category %}
+              <span class="badge bg-info">{{notification.post.category}}</span>
+              {% endif %}
+            </div>
+          </li>
+          {% endfor %}
+           {% else %}
+
+          <h6 class="text-center" style="color: grey; font-size: 12px">
+            <i class="icon-copy dw dw-notification"></i> New
+            Notifications!
+          </h6>
+
+          {% endif %}
+        </div> 
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  document.body.addEventListener("htmx:configRequest", (event) => {
+    event.detail.headers["X-CSRFToken"] = "{{ csrf_token }}";
+  });
+</script>

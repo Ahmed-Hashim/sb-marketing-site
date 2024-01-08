@@ -1,0 +1,7 @@
+{
+    "terminal.integrated.env.linux": {
+
+    },
+    "terminal.integrated.detectLocale": "auto",
+    "python.envFile": ""
+}
