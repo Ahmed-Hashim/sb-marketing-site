@@ -13,7 +13,6 @@ django-cleanup
 beautifulsoup4
 boto3
 django-storages
-gunicorn
 django-timezone-field
 openai
 opencv-contrib-python-headless
