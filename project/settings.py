@@ -67,7 +67,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "whitenoise.runserver_nostatic",
     "channels",
     "crispy_forms",
     "crispy_bootstrap5",
@@ -101,7 +100,6 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
     "django.middleware.common.CommonMiddleware",
