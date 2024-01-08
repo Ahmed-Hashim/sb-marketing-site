@@ -169,7 +169,7 @@ else:
             "USER": env("PGUSER"),
             "PASSWORD": env("PGPASSWORD"),
             "HOST": env("PGHOST"),
-            "PORT": env("PGPORT"),
+            "PORT": "",
         }
     }
 
