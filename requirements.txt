@@ -19,7 +19,6 @@ openai
 opencv-contrib-python-headless
 Pillow
 requests
-
 sweetify
 urllib3
 pytz

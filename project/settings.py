@@ -17,14 +17,16 @@ DEBUG = env.bool(("DEBUG"), default=True)
 
 
 ALLOWED_HOSTS = os.getenv(
-    "DJANGO_ALLOWED_HOSTS", "https://team.soulnbody.net,localhost"
+    "DJANGO_ALLOWED_HOSTS", "https://team.soulnbody.net,localhost,164.90.182.196"
 ).split(",")
 DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 CORS_ALLOWED_ORIGINS = [
     "https://team.soulnbody.net",
+    "164.90.182.196",
 ]
 CSRF_TRUSTED_ORIGINS = [
     "https://team.soulnbody.net",
+    "164.90.182.196",
 ]
 
 MESSAGE_TAGS = {
