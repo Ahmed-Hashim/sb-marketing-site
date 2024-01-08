@@ -21,12 +21,12 @@ ALLOWED_HOSTS = os.getenv(
 ).split(",")
 DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 CORS_ALLOWED_ORIGINS = [
-    "https://team.soulnbody.net",
+    "http://team.soulnbody.net",
     "164.90.182.196",
 ]
 CSRF_TRUSTED_ORIGINS = [
-    "https://team.soulnbody.net",
-    "164.90.182.196",
+    "http://team.soulnbody.net",
+    "http://164.90.182.196",
 ]
 
 MESSAGE_TAGS = {
