@@ -18,7 +18,7 @@ DEBUG = env.bool(("DEBUG"), default=True)
 
 ALLOWED_HOSTS = os.getenv(
     "DJANGO_ALLOWED_HOSTS",
-    "https://team.soulnbody.net,localhost,164.90.182.196,team.soulnbody.net",
+    "https://team.soulnbody.net,localhost,164.90.182.196,team.soulnbody.net,*",
 ).split(",")
 DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 CORS_ALLOWED_ORIGINS = [
@@ -229,23 +229,23 @@ LOGIN_REDIRECT_URL = "dashboard"
 LOGOUT_REDIRECT_URL = "login"
 LOGIN_URL = "login"
 
-EMAIL_BACKEND = "django_smtp_ssl.SSLEmailBackend"
 
-EMAIL_HOST = "mail.infomaniak.com"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.office365.com"
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_PORT = 465
 EMAIL_HOST_USER = env("EMAIL_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_PASS")
 
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
-AWS_S3_ACCESS_KEY_ID = env("AWS_S3_ACCESS_KEY_ID")
-AWS_S3_SECRET_ACCESS_KEY = env("AWS_S3_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
-AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME")
-AWS_QUERYSTRING_EXPIRE = 120
-AWS_S3_CUSTOM_DOMAIN = "d6prksi5n1o97.cloudfront.net"
-AWS_CLOUDFRONT_KEY = (
+# AWS_S3_ACCESS_KEY_ID = env("AWS_S3_ACCESS_KEY_ID")
+# AWS_S3_SECRET_ACCESS_KEY = env("AWS_S3_SECRET_ACCESS_KEY")
+# AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+# AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME")
+# AWS_QUERYSTRING_EXPIRE = 120
+# AWS_S3_CUSTOM_DOMAIN = "d6prksi5n1o97.cloudfront.net"
+"""AWS_CLOUDFRONT_KEY = (
     env.str("AWS_CLOUDFRONT_KEY", multiline=True).encode("ascii").strip()
-)
-AWS_CLOUDFRONT_KEY_ID = env.str("AWS_CLOUDFRONT_KEY_ID").strip()
+)"""
+# AWS_CLOUDFRONT_KEY_ID = env.str("AWS_CLOUDFRONT_KEY_ID").strip()

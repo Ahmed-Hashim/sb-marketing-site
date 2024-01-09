@@ -3,10 +3,10 @@ import boto3
 from botocore.exceptions import ClientError
 import os
 from django.conf import settings
-session = boto3.Session(
+"""session = boto3.Session(
   aws_access_key_id=settings.AWS_S3_ACCESS_KEY_ID,
   aws_secret_access_key=settings.AWS_S3_SECRET_ACCESS_KEY
-)
+)"""
 def upload_file(file_name, bucket, object_name=None):
     """Upload a file to an S3 bucket
 

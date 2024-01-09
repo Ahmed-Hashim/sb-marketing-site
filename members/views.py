@@ -1,6 +1,6 @@
 # from ipware import get_client_ip
 # import requests
-from ip2geotools.databases.noncommercial import DbIpCity
+#from ip2geotools.databases.noncommercial import DbIpCity
 from .models import AppDownLoad, Profile, Chat, Messege
 from django.http import JsonResponse
 from django.shortcuts import render, redirect

@@ -301,7 +301,7 @@ def publish_now(request, id):
 """
 
 
-def delete_my_model_instance(pk):
+"""def delete_my_model_instance(pk):
     my_model_instance = pk
 
     # Check if the instance has an image
@@ -313,7 +313,7 @@ def delete_my_model_instance(pk):
         # Delete the image file from AWS S3
         s3.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME,
                          Key=my_model_instance.design_link.name)
-
+"""
 
 @login_required
 def publish_now(request, id):

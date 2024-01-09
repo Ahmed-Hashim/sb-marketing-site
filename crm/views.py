@@ -10,7 +10,13 @@ from django.views.decorators.http import require_http_methods
 from django.http import QueryDict
 
 from products.views import invoice
-from .whatsapp import send_whatsapp_img, send_whatsapp_message, send_whatsapp_pdf, send_whatsapp_video
+from .whatsapp import (
+    send_whatsapp_img,
+    send_whatsapp_message,
+    send_whatsapp_pdf,
+    send_whatsapp_video,
+)
+
 # Create your views here.
 
 from .forms import *
@@ -41,92 +47,97 @@ class CustomPaginator(Paginator):
 @login_required
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def customerlist(request):
+    context = {"customers": Customer.objects.all()}
 
-    context = {"customers": Customer.objects.all()
-               }
-
-    return render(request, 'crm/listing.html', context)
+    return render(request, "crm/listing.html", context)
 
 
 @login_required
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-@require_http_methods(['POST'])
+@require_http_methods(["POST"])
 def AddClient(request):
     if request.method == "POST":
         form = CustomerForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(
-                request, f"{Customer.objects.first()} Has been added to client list")
+                request, f"{Customer.objects.first()} Has been added to client list"
+            )
 
     customers = Customer.objects.all()
     context = {
-        'customers': customers, }
-    return HttpResponse(status=204,
-                        headers={
-                            'HX-Trigger': json.dumps({
-                                "showMessage": ' <i class="fa-regular fa-file-lines"></i> New  client has been added .'
-                            })
-                        })
+        "customers": customers,
+    }
+    return HttpResponse(
+        status=204,
+        headers={
+            "HX-Trigger": json.dumps(
+                {
+                    "showMessage": ' <i class="fa-regular fa-file-lines"></i> New  client has been added .'
+                }
+            )
+        },
+    )
 
 
 @login_required
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-@require_http_methods(['DELETE', 'GET'])
+@require_http_methods(["DELETE", "GET"])
 def deleteClient(request, id):
     data = Customer.objects.get(pk=id)
     if request.method == "DELETE":
         data.delete()
-        return HttpResponse(status=204,
-                            headers={
-                                'HX-Trigger': json.dumps({
-                                    "crmChange": None,
-                                    "close": "close",
-                                    "showMessage": f"{data.company} Has been deleted ."
-                                })
-                            })
+        return HttpResponse(
+            status=204,
+            headers={
+                "HX-Trigger": json.dumps(
+                    {
+                        "crmChange": None,
+                        "close": "close",
+                        "showMessage": f"{data.company} Has been deleted .",
+                    }
+                )
+            },
+        )
     return render(request, "crm/deletemodal.html", {"customer": data})
 
 
 @login_required
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-@require_http_methods(['POST'])
+@require_http_methods(["POST"])
 def search_industry(request):
-    search_text = request.POST.get('industry')
+    search_text = request.POST.get("industry")
     iddata = Industry.objects.get(name__icontains=search_text)
     results = Customer.objects.all().filter(industry=iddata.id)
     context = {
-        'customers': results,
-
+        "customers": results,
     }
-    return render(request, 'crm/listing.html', context)
+    return render(request, "crm/listing.html", context)
 
 
 @login_required
-@require_http_methods(['POST'])
+@require_http_methods(["POST"])
 def search_status(request):
-    search_text = request.POST.get('status')
+    search_text = request.POST.get("status")
     print(search_text)
     iddata = Status.objects.get(type__icontains=search_text)
     results = Customer.objects.all().filter(status=iddata.id)
     context = {
-        'customers': results,
-
+        "customers": results,
     }
-    return render(request, 'crm/listing.html', context)
+    return render(request, "crm/listing.html", context)
 
 
 @login_required
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-@require_http_methods(['POST'])
+@require_http_methods(["POST"])
 def search_client(request):
-    search_text = request.POST.get('search')
+    search_text = request.POST.get("search")
     results = Customer.objects.filter(company__icontains=search_text)
     context = {
-        'customers': results,
-
+        "customers": results,
     }
-    return render(request, 'crm/listing.html', context)
+    return render(request, "crm/listing.html", context)
 
 
 @login_required
@@ -137,14 +148,14 @@ def Customerlistview(request):
     statuses = Status.objects.all()
     form = CustomerForm
     context = {
-        'customers': customer,
-        'industrys': industry,
-        'statuses': statuses,
-        'form': form,
-        'title': 'Customers List',
+        "customers": customer,
+        "industrys": industry,
+        "statuses": statuses,
+        "form": form,
+        "title": "Customers List",
     }
 
-    return render(request, 'crm/list.html', context)
+    return render(request, "crm/list.html", context)
 
 
 @login_required
@@ -155,23 +166,32 @@ def view_edit_customer(request, id):
     customers = Customer.objects.all()
     contacts = customer.contact_set.all()
     contactform = Addcontanct
-    context = {"customer": customer, "edit_form": form, "customers": customers,
-               "contacts": contacts, "contactform": contactform, }
-    if request.method == 'GET':
-        return render(request, 'crm/show_modal.html', context)
+    context = {
+        "customer": customer,
+        "edit_form": form,
+        "customers": customers,
+        "contacts": contacts,
+        "contactform": contactform,
+    }
+    if request.method == "GET":
+        return render(request, "crm/show_modal.html", context)
     elif request.method == "PUT":
         data = QueryDict(request.body).dict()
         form = CustomerForm(data, instance=customer)
         if form.is_valid:
             form.save()
-            return HttpResponse(status=204,
-                                headers={
-                                    'HX-Trigger': json.dumps({
-                                        "crmChange": None,
-                                        "showMessage": f"{customer.company} details has been edited successfully.",
-                                        "type": "bg-success"
-
-                                    })})
+            return HttpResponse(
+                status=204,
+                headers={
+                    "HX-Trigger": json.dumps(
+                        {
+                            "crmChange": None,
+                            "showMessage": f"{customer.company} details has been edited successfully.",
+                            "type": "bg-success",
+                        }
+                    )
+                },
+            )
 
 
 @login_required
@@ -180,11 +200,10 @@ def emails(request, id):
     customer = get_object_or_404(Customer, pk=id)
     form = Customer_Email_Form(request.POST)
     customers = Customer.objects.all()
-    context = {"customer": customer,
-               "email_form": form, "customers": customers}
-    if request.method == 'GET':
-        return render(request, 'crm/send_email.html', context)
-    if request.method == 'POST' and "simple-mail" in request.POST:
+    context = {"customer": customer, "email_form": form, "customers": customers}
+    if request.method == "GET":
+        return render(request, "crm/send_email.html", context)
+    if request.method == "POST" and "simple-mail" in request.POST:
         if customer.email:
             if form.is_valid():
                 form.save()
@@ -195,7 +214,7 @@ def emails(request, id):
             try:
                 file = request.FILES["file_upload"]
                 customer_email = get_object_or_404(Customer, pk=company).email
-                user_email = 'Marketing@almazadi.com'
+                user_email = "info@soulnbody.net"
                 email = EmailMultiAlternatives(
                     subject,
                     message,
@@ -206,18 +225,22 @@ def emails(request, id):
 
                 email.send()
                 print(subject, message, customer_email, user_email)
-                return HttpResponse(status=204,
-                                    headers={
-                                        'HX-Trigger': json.dumps({
-                                            "emailChange": None,
-                                            "close": "close",
-                                            "showMessage": f"Email Sent To {customer.company} .",
-                                            "type": "bg-success"
-                                        })
-                                    })
+                return HttpResponse(
+                    status=204,
+                    headers={
+                        "HX-Trigger": json.dumps(
+                            {
+                                "emailChange": None,
+                                "close": "close",
+                                "showMessage": f"Email Sent To {customer.company} .",
+                                "type": "bg-success",
+                            }
+                        )
+                    },
+                )
             except:
                 customer_email = get_object_or_404(Customer, pk=company).email
-                user_email = 'Marketing@almazadi.com'
+                user_email = "info@soulnbody.net"
                 email = EmailMultiAlternatives(
                     subject,
                     message,
@@ -226,63 +249,76 @@ def emails(request, id):
                 )
                 email.send()
                 print(subject, message, customer_email, user_email)
-                return HttpResponse(status=204,
-                                    headers={
-                                        'HX-Trigger': json.dumps({
-                                            "emailChange": None,
-                                            "close": "close",
-                                            "showMessage": f"Email Sent To {customer.company} .",
-                                            "type": "bg-success"
-                                        })
-                                    })
+                return HttpResponse(
+                    status=204,
+                    headers={
+                        "HX-Trigger": json.dumps(
+                            {
+                                "emailChange": None,
+                                "close": "close",
+                                "showMessage": f"Email Sent To {customer.company} .",
+                                "type": "bg-success",
+                            }
+                        )
+                    },
+                )
         else:
-            return HttpResponse(status=204,
-                                headers={
-                                    'HX-Trigger': json.dumps({
-                                        "emailChange": None,
-                                        "close": "close",
-                                        "showMessage": f"{customer.company} Dont have email address add email then try again .",
-                                        "type": "bg-danger",
-                                    })
-                                })
+            return HttpResponse(
+                status=204,
+                headers={
+                    "HX-Trigger": json.dumps(
+                        {
+                            "emailChange": None,
+                            "close": "close",
+                            "showMessage": f"{customer.company} Dont have email address add email then try again .",
+                            "type": "bg-danger",
+                        }
+                    )
+                },
+            )
 
-    elif request.method == 'POST' and "template" in request.POST:
-
-        company = request.POST.get('company')
-        clinetemail = request.POST.get('email')
-        content = request.POST.get('emailtype')
+    elif request.method == "POST" and "template" in request.POST:
+        company = request.POST.get("company")
+        clinetemail = request.POST.get("email")
+        content = request.POST.get("emailtype")
         user_sender = request.user
         print(user_sender)
         content_sent = ""
         link = "https://www.facebook.com/Almazadiii"
         insta = "https://www.instagram.com/almazadi.official/"
-        template = get_template('email.txt')
+        template = get_template("email.txt")
         context = {
-            'company': company,
-            'downloadlink': link,
-            'facebooklink': link,
-            'instgramlink': insta,
-            'twitterlink': link,
+            "company": company,
+            "downloadlink": link,
+            "facebooklink": link,
+            "instgramlink": insta,
+            "twitterlink": link,
         }
         message = template.render(context)
         email = EmailMultiAlternatives(
-            "Al-Mazadi", message,
-            'Marketing@almazadi.com',
-            [clinetemail]
+            "SB", message, "info@soulnbody.net", [clinetemail]
         )
-        email.content_subtype = 'html'
+        email.content_subtype = "html"
         email.send()
-        Customer_Email.objects.create(subject="template", message="Template Content",
-                                      sender=user_sender, company=Customer.objects.get(company__icontains=company))
-        return HttpResponse(status=204,
-                            headers={
-                                'HX-Trigger': json.dumps({
-                                    "emailChange": None,
-                                    "showMessage": f"Email Sent To {customer.company} .",
-                                    "close": "close",
-                                    "type": "bg-success"
-                                })
-                            })
+        Customer_Email.objects.create(
+            subject="template",
+            message="Template Content",
+            sender=user_sender,
+            company=Customer.objects.get(company__icontains=company),
+        )
+        return HttpResponse(
+            status=204,
+            headers={
+                "HX-Trigger": json.dumps(
+                    {
+                        "emailChange": None,
+                        "showMessage": f"Email Sent To {customer.company} .",
+                        "close": "close",
+                        "type": "bg-success",
+                    }
+                )
+            },
+        )
 
 
 @login_required
@@ -290,7 +326,7 @@ def emails(request, id):
 def veiw_client(request, id):
     customer = get_object_or_404(Customer, pk=id)
     context = {"customer": customer}
-    return render(request, 'crm/customer_modal_info.html', context)
+    return render(request, "crm/customer_modal_info.html", context)
 
 
 @login_required
@@ -298,11 +334,12 @@ def veiw_client(request, id):
 def customerlist_json(request):
     customers = Customer.objects.all()
     data = [customer.get_data() for customer in customers]
-    response = {'data': data}
+    response = {"data": data}
     return JsonResponse(response)
 
+
 # def email_templates(request):
-    # return render(request,"crm/email_templates.html")
+# return render(request,"crm/email_templates.html")
 
 
 @login_required
@@ -318,20 +355,28 @@ def add_customer(request):
         form = CustomerForm(request.POST)
         if form.is_valid():
             customer = form.save()
-            return HttpResponse(status=204,
-                                headers={
-                                    'HX-Trigger': json.dumps({
-                                        "crmChange": None,
-                                        "showMessage": f"{customer.company} added.",
-                                        "close": "close",
-                                        "type": "bg-success"
-                                    })
-                                })
+            return HttpResponse(
+                status=204,
+                headers={
+                    "HX-Trigger": json.dumps(
+                        {
+                            "crmChange": None,
+                            "showMessage": f"{customer.company} added.",
+                            "close": "close",
+                            "type": "bg-success",
+                        }
+                    )
+                },
+            )
     else:
         form = CustomerForm()
-    return render(request, 'crm/add.html', {
-        'form': form,
-    })
+    return render(
+        request,
+        "crm/add.html",
+        {
+            "form": form,
+        },
+    )
 
 
 @login_required
@@ -345,14 +390,18 @@ def view_add_contact(request, id):
         form = Addcontanct(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponse(status=204,
-                                headers={
-                                    'HX-Trigger': json.dumps({
-                                        "contactChange": None,
-                                        "showMessage": f"contact added successfully.",
-                                        "type": "bg-success"
-                                    })
-                                })
+            return HttpResponse(
+                status=204,
+                headers={
+                    "HX-Trigger": json.dumps(
+                        {
+                            "contactChange": None,
+                            "showMessage": f"contact added successfully.",
+                            "type": "bg-success",
+                        }
+                    )
+                },
+            )
 
 
 @login_required
@@ -360,14 +409,18 @@ def view_add_contact(request, id):
 def delete_contact(request, id):
     contact = get_object_or_404(Contact, pk=id)
     contact.delete()
-    return HttpResponse(status=204,
-                        headers={
-                            'HX-Trigger': json.dumps({
-                                "contactChange": None,
-                                "showMessage": f"contact deleted successfully.",
-                                "type": "bg-success"
-                            })
-                        })
+    return HttpResponse(
+        status=204,
+        headers={
+            "HX-Trigger": json.dumps(
+                {
+                    "contactChange": None,
+                    "showMessage": f"contact deleted successfully.",
+                    "type": "bg-success",
+                }
+            )
+        },
+    )
 
 
 @login_required
@@ -397,7 +450,6 @@ def client_emails(request, id):
     context = {
         "customer": customer,
         "emails": email,
-
     }
     return render(request, "crm/client_emails.html", context)
 
@@ -465,15 +517,19 @@ def add_note(request, id):
         form = Addnote(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponse(status=204,
-                                headers={
-                                    'HX-Trigger': json.dumps({
-                                        "noteChange": None,
-                                        "showMessage": f"Note as been added successfully.",
-                                        "close": "close",
-                                        "type": "bg-info"
-                                    })
-                                })
+            return HttpResponse(
+                status=204,
+                headers={
+                    "HX-Trigger": json.dumps(
+                        {
+                            "noteChange": None,
+                            "showMessage": f"Note as been added successfully.",
+                            "close": "close",
+                            "type": "bg-info",
+                        }
+                    )
+                },
+            )
     else:
         form = Addnote
         customer = get_object_or_404(Customer, pk=id)
@@ -488,17 +544,16 @@ def add_note(request, id):
 def show_email(request, id):
     email = get_object_or_404(Customer_Email, id=id)
 
-    context = {
-
-        'email': email
-    }
+    context = {"email": email}
 
     return render(request, "crm/show_email.html", context)
 
 
 def whatsapp(request, id):
     customer = get_object_or_404(Customer, id=id)
-    context = {"customer": customer, }
+    context = {
+        "customer": customer,
+    }
     return render(request, "crm/send_whatsapp.html", context)
 
 
@@ -517,97 +572,135 @@ def send_whatsapp(request, id):
             print("its text message Sending.....")
             response = send_whatsapp_message(number, str(message))
             if response["sent"] == "true":
-                return HttpResponse(status=204,
-                                    headers={
-                                        'HX-Trigger': json.dumps({
-                                            "noteChange": None,
-                                            "showMessage": f"Message sent to {customer.company}",
-                                            "close": "close",
-                                            "type": "bg-success"
-                                        })
-                                    })
+                return HttpResponse(
+                    status=204,
+                    headers={
+                        "HX-Trigger": json.dumps(
+                            {
+                                "noteChange": None,
+                                "showMessage": f"Message sent to {customer.company}",
+                                "close": "close",
+                                "type": "bg-success",
+                            }
+                        )
+                    },
+                )
             else:
-                return HttpResponse(status=204,
-                                    headers={
-                                        'HX-Trigger': json.dumps({
-                                            "noteChange": None,
-                                            "showMessage": f"Message Error!",
-                                            "type": "bg-danger"
-                                        })
-                                    })
+                return HttpResponse(
+                    status=204,
+                    headers={
+                        "HX-Trigger": json.dumps(
+                            {
+                                "noteChange": None,
+                                "showMessage": f"Message Error!",
+                                "type": "bg-danger",
+                            }
+                        )
+                    },
+                )
         elif type == "pdf":
             response = send_whatsapp_pdf(number, str(message), url)
             if response["sent"] == "true":
-                return HttpResponse(status=204,
-                                    headers={
-                                        'HX-Trigger': json.dumps({
-                                            "noteChange": None,
-                                            "showMessage": f"Message sent to {customer.company}",
-                                            "close": "close",
-                                            "type": "bg-success"
-                                        })
-                                    })
+                return HttpResponse(
+                    status=204,
+                    headers={
+                        "HX-Trigger": json.dumps(
+                            {
+                                "noteChange": None,
+                                "showMessage": f"Message sent to {customer.company}",
+                                "close": "close",
+                                "type": "bg-success",
+                            }
+                        )
+                    },
+                )
             else:
-                return HttpResponse(status=204,
-                                    headers={
-                                        'HX-Trigger': json.dumps({
-                                            "noteChange": None,
-                                            "showMessage": f"Message Error!",
-                                            "type": "bg-danger"
-                                        })
-                                    })
+                return HttpResponse(
+                    status=204,
+                    headers={
+                        "HX-Trigger": json.dumps(
+                            {
+                                "noteChange": None,
+                                "showMessage": f"Message Error!",
+                                "type": "bg-danger",
+                            }
+                        )
+                    },
+                )
         elif type == "image":
             response = send_whatsapp_img(number, str(message), url)
             if response["sent"] == "true":
-                return HttpResponse(status=204,
-                                    headers={
-                                        'HX-Trigger': json.dumps({
-                                            "noteChange": None,
-                                            "showMessage": f"Message sent to {customer.company}",
-                                            "close": "close",
-                                            "type": "bg-success"
-                                        })
-                                    })
+                return HttpResponse(
+                    status=204,
+                    headers={
+                        "HX-Trigger": json.dumps(
+                            {
+                                "noteChange": None,
+                                "showMessage": f"Message sent to {customer.company}",
+                                "close": "close",
+                                "type": "bg-success",
+                            }
+                        )
+                    },
+                )
             else:
-                return HttpResponse(status=204,
-                                    headers={
-                                        'HX-Trigger': json.dumps({
-                                            "noteChange": None,
-                                            "showMessage": f"Message Error!",
-                                            "type": "bg-danger"
-                                        })
-                                    })
+                return HttpResponse(
+                    status=204,
+                    headers={
+                        "HX-Trigger": json.dumps(
+                            {
+                                "noteChange": None,
+                                "showMessage": f"Message Error!",
+                                "type": "bg-danger",
+                            }
+                        )
+                    },
+                )
         elif type == "video":
             response = send_whatsapp_video(number, str(message), url)
             if response["sent"] == "true":
-                return HttpResponse(status=204,
-                                    headers={
-                                        'HX-Trigger': json.dumps({
-                                            "noteChange": None,
-                                            "showMessage": f"Message sent to {customer.company}",
-                                            "close": "close",
-                                            "type": "bg-success"
-                                        })
-                                    })
+                return HttpResponse(
+                    status=204,
+                    headers={
+                        "HX-Trigger": json.dumps(
+                            {
+                                "noteChange": None,
+                                "showMessage": f"Message sent to {customer.company}",
+                                "close": "close",
+                                "type": "bg-success",
+                            }
+                        )
+                    },
+                )
             else:
-                return HttpResponse(status=204,
-                                    headers={
-                                        'HX-Trigger': json.dumps({
-                                            "noteChange": None,
-                                            "showMessage": f"Message Error!",
-                                            "type": "bg-danger"
-                                        })
-                                    })
+                return HttpResponse(
+                    status=204,
+                    headers={
+                        "HX-Trigger": json.dumps(
+                            {
+                                "noteChange": None,
+                                "showMessage": f"Message Error!",
+                                "type": "bg-danger",
+                            }
+                        )
+                    },
+                )
         else:
-            return HttpResponse(status=204,
-                                headers={
-                                    'HX-Trigger': json.dumps({
-                                        "noteChange": None,
-                                        "showMessage": f"Message Error!",
-                                        "type": "bg-danger"
-                                    })
-                                })
-    context = {"customer": customer, }
+            return HttpResponse(
+                status=204,
+                headers={
+                    "HX-Trigger": json.dumps(
+                        {
+                            "noteChange": None,
+                            "showMessage": f"Message Error!",
+                            "type": "bg-danger",
+                        }
+                    )
+                },
+            )
+    context = {
+        "customer": customer,
+    }
     return render(request, "crm/send_whatsapp.html", context)
 
 
@@ -618,56 +711,63 @@ def Whatsapp_Temp(request):
         form = AddTemplate(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return HttpResponse(status=204,
-                                headers={
-                                    'HX-Trigger': json.dumps({
-                                        "uploadChange": None,
-                                        "tempChange": None,
-                                        "close": "close",
-                                        "showMessage": f"Template Has Been Saved",
-                                        "type": "bg-success"
-                                    })
-                                })
+            return HttpResponse(
+                status=204,
+                headers={
+                    "HX-Trigger": json.dumps(
+                        {
+                            "uploadChange": None,
+                            "tempChange": None,
+                            "close": "close",
+                            "showMessage": f"Template Has Been Saved",
+                            "type": "bg-success",
+                        }
+                    )
+                },
+            )
         else:
-            return HttpResponse(status=204,
-                                headers={
-                                    'HX-Trigger': json.dumps({
-                                        "showMessage": f"Error Happen Try Again",
-                                        "type": "bg-danger"
-                                    })
-                                })
+            return HttpResponse(
+                status=204,
+                headers={
+                    "HX-Trigger": json.dumps(
+                        {"showMessage": f"Error Happen Try Again", "type": "bg-danger"}
+                    )
+                },
+            )
     else:
         form = AddTemplate()
         templates = Whatsapp_Template.objects.all()
-        context = {'forma': form, 'templates': templates}
-        return render(request, 'crm/whatsapp_templates.html', context)
+        context = {"forma": form, "templates": templates}
+        return render(request, "crm/whatsapp_templates.html", context)
+
+
 ######### Whatsapp Settings##########
 
 
 def whatsapp_settings(request):
     form = AddTemplate()
     templates = Whatsapp_Template.objects.all()
-    context = {'forma': form, 'title': 'Whatsapp Settings',
-               'templates': templates}
-    return render(request, 'crm/whatsapp_settings.html', context)
+    context = {"forma": form, "title": "Whatsapp Settings", "templates": templates}
+    return render(request, "crm/whatsapp_settings.html", context)
 
 
 def temps_listing(request):
     templates = Whatsapp_Template.objects.all()
-    context = {'templates': templates}
-    return render(request, 'crm/temp_listing.html', context)
+    context = {"templates": templates}
+    return render(request, "crm/temp_listing.html", context)
+
 
 ######### Whatsapp Settings Modals##########
 
 
 def add_wapp_temp_model(request):
-    return render(request, 'crm/modals/add_whatapp_temp.html')
+    return render(request, "crm/modals/add_whatapp_temp.html")
 
 
 def show_temp(request, id):
     temp = Whatsapp_Template.objects.get(pk=id)
-    context = {'temp': temp}
-    return render(request, 'crm/modals/show_template_whatsapp.html', context)
+    context = {"temp": temp}
+    return render(request, "crm/modals/show_template_whatsapp.html", context)
 
 
 def edit_temp(request, id):
@@ -678,28 +778,33 @@ def edit_temp(request, id):
         form = AddTemplate(data, instance=temp)
         if form.is_valid():
             form.save()
-            return HttpResponse(status=204,
-                                headers={
-                                    'HX-Trigger': json.dumps({
-                                        "tempChange": None,
-                                        "close": "close",
-                                        "showMessage": f"Template Has Been Saved",
-                                        "type": "bg-success"
-                                    })
-                                })
+            return HttpResponse(
+                status=204,
+                headers={
+                    "HX-Trigger": json.dumps(
+                        {
+                            "tempChange": None,
+                            "close": "close",
+                            "showMessage": f"Template Has Been Saved",
+                            "type": "bg-success",
+                        }
+                    )
+                },
+            )
         else:
-            return HttpResponse(status=204,
-                                headers={
-                                    'HX-Trigger': json.dumps({
-                                        "showMessage": f"Error Happen Try Again",
-                                        "type": "bg-danger"
-                                    })
-                                })
+            return HttpResponse(
+                status=204,
+                headers={
+                    "HX-Trigger": json.dumps(
+                        {"showMessage": f"Error Happen Try Again", "type": "bg-danger"}
+                    )
+                },
+            )
     elif request.method == "GET":
         temp = Whatsapp_Template.objects.get(pk=id)
         form = AddTemplate(instance=temp)
-        context = {'temp': temp, "form": form}
-        return render(request, 'crm/modals/edit_template_whatsapp.html', context)
+        context = {"temp": temp, "form": form}
+        return render(request, "crm/modals/edit_template_whatsapp.html", context)
 
 
 def delete_temp(request, id):
@@ -707,17 +812,22 @@ def delete_temp(request, id):
     if request.method == "DELETE":
         temp = Whatsapp_Template.objects.get(pk=id)
         temp.delete()
-        return HttpResponse(status=204,
-                            headers={
-                                'HX-Trigger': json.dumps({
-                                    "tempChange": None,
-                                    "close": 'close',
-                                    "showMessage": f"Template Deleted",
-                                    "type": "bg-success"
-                                })
-                            })
+        return HttpResponse(
+            status=204,
+            headers={
+                "HX-Trigger": json.dumps(
+                    {
+                        "tempChange": None,
+                        "close": "close",
+                        "showMessage": f"Template Deleted",
+                        "type": "bg-success",
+                    }
+                )
+            },
+        )
     else:
         return render(request, "crm/modals/delete_whatapp_temp.html", {"temp": temp})
+
 
 ######### Whatsapp Send Template##########
 
@@ -726,15 +836,17 @@ def delete_temp(request, id):
 
 def send_template(request):
     templates = Whatsapp_Template.objects.all()
-    context = {'templates': templates}
-    return render(request, 'crm/send_template_whatsapp.html', context)
+    context = {"templates": templates}
+    return render(request, "crm/send_template_whatsapp.html", context)
+
+
 ######### Send Template Action##########
 
 
 def send_to_customer(request):
     # Get data from form
-    number = request.POST.get('phone_number')  # Customer Phone Number
-    template_id = request.POST.get('template_id')  # Template ID
+    number = request.POST.get("phone_number")  # Customer Phone Number
+    template_id = request.POST.get("template_id")  # Template ID
     template = Whatsapp_Template.objects.get(pk=template_id)
 
     customer = Customer.objects.filter(land_phone_number__contains=number)[0]
@@ -744,67 +856,102 @@ def send_to_customer(request):
         # print("Sending Text")
         send_whatsapp_message(number, template.message)
         Whatsapp_Messages.objects.create(
-            company=customer, type=template.type, message=template.message, file_upload=None)
-        return HttpResponse(status=204,
-                            headers={
-                                'HX-Trigger': json.dumps({
-                                    "close": "close",
-                                    "showMessage": f"Message Sent",
-                                    "type": "bg-success"
-                                })
-                            })
+            company=customer,
+            type=template.type,
+            message=template.message,
+            file_upload=None,
+        )
+        return HttpResponse(
+            status=204,
+            headers={
+                "HX-Trigger": json.dumps(
+                    {
+                        "close": "close",
+                        "showMessage": f"Message Sent",
+                        "type": "bg-success",
+                    }
+                )
+            },
+        )
     elif template.type == "IMAGE":
         send_whatsapp_img(number, template.message, full_url)
         Whatsapp_Messages.objects.create(
-            company=customer, type=template.type, message=template.message, file_upload=template.file_upload)
+            company=customer,
+            type=template.type,
+            message=template.message,
+            file_upload=template.file_upload,
+        )
         # print("Sending IMAGE")
-        return HttpResponse(status=204,
-                            headers={
-                                'HX-Trigger': json.dumps({
-                                    "close": "close",
-                                    "showMessage": f"Message Sent",
-                                    "type": "bg-success"
-                                })
-                            })
+        return HttpResponse(
+            status=204,
+            headers={
+                "HX-Trigger": json.dumps(
+                    {
+                        "close": "close",
+                        "showMessage": f"Message Sent",
+                        "type": "bg-success",
+                    }
+                )
+            },
+        )
     elif template.type == "VIDEO":
         # print("Sending VIDEO")
         send_whatsapp_video(number, template.message, full_url)
         Whatsapp_Messages.objects.create(
-            company=customer, type=template.type, message=template.message, file_upload=template.file_upload)
-        return HttpResponse(status=204,
-                            headers={
-                                'HX-Trigger': json.dumps({
-                                    "close": "close",
-                                    "showMessage": f"Message Sent",
-                                    "type": "bg-success"
-                                })
-                            })
+            company=customer,
+            type=template.type,
+            message=template.message,
+            file_upload=template.file_upload,
+        )
+        return HttpResponse(
+            status=204,
+            headers={
+                "HX-Trigger": json.dumps(
+                    {
+                        "close": "close",
+                        "showMessage": f"Message Sent",
+                        "type": "bg-success",
+                    }
+                )
+            },
+        )
     elif template.type == "PDF":
         # print("Sending PDF")
         send_whatsapp_pdf(number, template.message, full_url)
         Whatsapp_Messages.objects.create(
-            company=customer, type=template.type, message=template.message, file_upload=template.file_upload)
-        return HttpResponse(status=204,
-                            headers={
-                                'HX-Trigger': json.dumps({
-                                    "close": "close",
-                                    "showMessage": f"Message Sent",
-                                    "type": "bg-success"
-                                })
-                            })
+            company=customer,
+            type=template.type,
+            message=template.message,
+            file_upload=template.file_upload,
+        )
+        return HttpResponse(
+            status=204,
+            headers={
+                "HX-Trigger": json.dumps(
+                    {
+                        "close": "close",
+                        "showMessage": f"Message Sent",
+                        "type": "bg-success",
+                    }
+                )
+            },
+        )
     else:
-        return HttpResponse(status=204,
-                            headers={
-                                'HX-Trigger': json.dumps({
-                                    "showMessage": f"Error Happen Try Again",
-                                    "type": "bg-danger"
-                                })
-                            })
+        return HttpResponse(
+            status=204,
+            headers={
+                "HX-Trigger": json.dumps(
+                    {"showMessage": f"Error Happen Try Again", "type": "bg-danger"}
+                )
+            },
+        )
+
+
 ######### Show Template Action##########
 
 
 def send_show_temp_whatsapp(request):
-    id = request.GET.get('template')
+    id = request.GET.get("template")
     template = Whatsapp_Template.objects.get(pk=id)
-    context = {'title': 'Whatsapp Settings', 'template': template}
-    return render(request, 'crm/send_show_temp_whatsapp.html', context)
+    context = {"title": "Whatsapp Settings", "template": template}
+    return render(request, "crm/send_show_temp_whatsapp.html", context)
