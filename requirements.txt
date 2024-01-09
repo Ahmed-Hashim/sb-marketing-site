@@ -29,4 +29,3 @@ django-celery-beat
 psycopg2-binary
 django-resized
 ip2geotools
-httpagentparser
