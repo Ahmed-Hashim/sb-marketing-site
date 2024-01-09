@@ -2,8 +2,9 @@ import os
 from django.contrib.messages import constants as messages
 import environ
 from django.utils.translation import gettext_lazy as _
+from pathlib import Path
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
