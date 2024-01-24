@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 import requests
 import os
 
@@ -53,3 +54,10 @@ def send_whatsapp_video(number, message, videourl):
     headers = {'content-type': 'application/x-www-form-urlencoded'}
     response = requests.request("POST", url, data=payload, headers=headers)
     return response.json()
+
+def web_hook(request):
+        VERIFY_TOKEN = 'SBMADATOKEN'
+        if request.GET['hub.verify_token'] == VERIFY_TOKEN:
+            return HttpResponse(request.GET['hub.challenge'])
+        else:
+            return HttpResponse('Error, invalid token')

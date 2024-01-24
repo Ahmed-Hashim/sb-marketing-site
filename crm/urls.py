@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-
+from .whatsapp import web_hook
 urlpatterns = [
     ###################################################################
     ########################### List URLS #############################
@@ -26,6 +26,7 @@ urlpatterns = [
     path('show_email/p=<int:id>', views.show_email,name='show_email'),
     path('send_whatsapp/p=<int:id>', views.send_whatsapp,name='send_whatsapp'),
     path('whatsapp/p=<int:id>', views.whatsapp,name='whatsapp'),
+    path('hook_confirm', web_hook,name='web_hook'),
     ###################################################################
     ########################### Random URLS ###########################
     ###################################################################
