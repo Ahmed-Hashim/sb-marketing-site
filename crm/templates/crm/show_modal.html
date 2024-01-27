@@ -80,17 +80,25 @@
               <h5>Contact Data</h5>
               <hr class="profile-social">
               <div class="row mt-1">
-                <div class="col-4">
-                  <h6>Email</h6>
-                  <span>{{customer.email}}</span> 
+                <div class="row mt-1">
+                  <div class="col-6">
+                    <h6>Email</h6>
+                    <span>{{customer.email}}</span> 
+                  </div>
+                  <div class="col-6">
+                    <h6>Website</h6>
+                    <span>{{customer.website}}</span> 
+                  </div>              
                 </div>
-                <div class="col-4">
-                  <h6>Website</h6>
-                  <span>{{customer.website}}</span> 
-                </div>              
-                <div class="col-4">
-                  <h6>Phone Number</h6>
-                  <span>{{customer.land_phone_number}}</span> 
+                <div class="row mt-1">              
+                  <div class="col-6">
+                    <h6>Land Phone Number</h6>
+                    <span>{{customer.land_phone_number}}</span> 
+                  </div>
+                  <div class="col-6">
+                    <h6>Phone Number</h6>
+                    <span>{{customer.phone_number}}</span> 
+                  </div>
                 </div>
               </div>
               <hr class="profile-social">
@@ -231,8 +239,8 @@
                 </div>
                 <div class="row mt-1">
                   <div class="col">
-                    <h6>Company</h6>
-                    {{edit_form.company}}
+                    <h6>Clinic / Hosbital </h6>
+                    {{edit_form.clinic_or_hosbital_name}}
                   </div>
                   <div class="col">
                     <h6>Industry</h6>
@@ -253,18 +261,26 @@
                   </h5>
                 </div>
                 <div class="row mt-1">
-                  <div class="col-4">
+                  <div class="row">
+                  <div class="col-6">
                     <h6>Email</h6>
                     {{edit_form.email}}
                   </div>
-                  <div class="col-4">
+                  <div class="col-6">
                     <h6>Website</h6>
                     {{edit_form.website}}
-                  </div>                  
-                  <div class="col-4">
+                  </div>
+                </div>   
+                <div class="row">             
+                  <div class="col-6">
                     <h6>Phone Number</h6>
                     {{edit_form.land_phone_number}}
                   </div>
+                  <div class="col-6">
+                    <h6>Phone Number</h6>
+                    {{edit_form.phone_number}}
+                  </div>
+                </div>  
                 </div>
                 <div class="row bg-secondary p-2 mb-3 mt-3">
                   <h5 class="text-light">
@@ -311,8 +327,8 @@
     </div>
         </div>
         <script>
-          const button = document.getElementById('btn');
-          button.addEventListener('click', (event) => {
+          const pdf_create = document.getElementById('btn');
+          pdf_create.addEventListener('click', (event) => {
           
             var element = document.getElementById('show-modal');
                 var opt = {

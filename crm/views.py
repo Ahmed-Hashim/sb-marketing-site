@@ -94,7 +94,7 @@ def deleteClient(request, id):
                     {
                         "crmChange": None,
                         "close": "close",
-                        "showMessage": f"{data.company} Has been deleted .",
+                        "showMessage": f"{data.clinic_or_hosbital_name} Has been deleted .",
                     }
                 )
             },
@@ -133,7 +133,7 @@ def search_status(request):
 @require_http_methods(["POST"])
 def search_client(request):
     search_text = request.POST.get("search")
-    results = Customer.objects.filter(company__icontains=search_text)
+    results = Customer.objects.filter(clinic_or_hosbital_name__icontains=search_text)
     context = {
         "customers": results,
     }
@@ -186,7 +186,7 @@ def view_edit_customer(request, id):
                     "HX-Trigger": json.dumps(
                         {
                             "crmChange": None,
-                            "showMessage": f"{customer.company} details has been edited successfully.",
+                            "showMessage": f"{customer.clinic_or_hosbital_name} details has been edited successfully.",
                             "type": "bg-success",
                         }
                     )
@@ -213,7 +213,7 @@ def emails(request, id):
             sender = request.POST.get("sender")
             try:
                 file = request.FILES["file_upload"]
-                customer_email = get_object_or_404(Customer, pk=company).email
+                customer_email = customer.email
                 user_email = "info@soulnbody.net"
                 email = EmailMultiAlternatives(
                     subject,
@@ -232,14 +232,14 @@ def emails(request, id):
                             {
                                 "emailChange": None,
                                 "close": "close",
-                                "showMessage": f"Email Sent To {customer.company} .",
+                                "showMessage": f"Email Sent To {customer.clinic_or_hosbital_name} .",
                                 "type": "bg-success",
                             }
                         )
                     },
                 )
             except:
-                customer_email = get_object_or_404(Customer, pk=company).email
+                customer_email = customer.email
                 user_email = "info@soulnbody.net"
                 email = EmailMultiAlternatives(
                     subject,
@@ -248,7 +248,7 @@ def emails(request, id):
                     [customer_email],
                 )
                 email.send()
-                print(subject, message, customer_email, user_email)
+                # print(subject, message, customer_email, user_email)
                 return HttpResponse(
                     status=204,
                     headers={
@@ -256,7 +256,7 @@ def emails(request, id):
                             {
                                 "emailChange": None,
                                 "close": "close",
-                                "showMessage": f"Email Sent To {customer.company} .",
+                                "showMessage": f"Email Sent To {customer.clinic_or_hosbital_name} .",
                                 "type": "bg-success",
                             }
                         )
@@ -270,7 +270,7 @@ def emails(request, id):
                         {
                             "emailChange": None,
                             "close": "close",
-                            "showMessage": f"{customer.company} Dont have email address add email then try again .",
+                            "showMessage": f"{customer.clinic_or_hosbital_name} Dont have email address add email then try again .",
                             "type": "bg-danger",
                         }
                     )
@@ -304,7 +304,7 @@ def emails(request, id):
             subject="template",
             message="Template Content",
             sender=user_sender,
-            company=Customer.objects.get(company__icontains=company),
+            company=customer,
         )
         return HttpResponse(
             status=204,
@@ -312,7 +312,7 @@ def emails(request, id):
                 "HX-Trigger": json.dumps(
                     {
                         "emailChange": None,
-                        "showMessage": f"Email Sent To {customer.company} .",
+                        "showMessage": f"Email Sent To {customer.clinic_or_hosbital_name} .",
                         "close": "close",
                         "type": "bg-success",
                     }
@@ -338,10 +338,6 @@ def customerlist_json(request):
     return JsonResponse(response)
 
 
-# def email_templates(request):
-# return render(request,"crm/email_templates.html")
-
-
 @login_required
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def toast(request):
@@ -361,7 +357,7 @@ def add_customer(request):
                     "HX-Trigger": json.dumps(
                         {
                             "crmChange": None,
-                            "showMessage": f"{customer.company} added.",
+                            "showMessage": f"{customer.clinic_or_hosbital_name} added.",
                             "close": "close",
                             "type": "bg-success",
                         }
@@ -551,8 +547,10 @@ def show_email(request, id):
 
 def whatsapp(request, id):
     customer = get_object_or_404(Customer, id=id)
+    phone_select = PhoneSelectForm(company_id=customer.id)
     context = {
         "customer": customer,
+        "phone_select": phone_select,
     }
     return render(request, "crm/send_whatsapp.html", context)
 
@@ -560,10 +558,10 @@ def whatsapp(request, id):
 def send_whatsapp(request, id):
     customer = get_object_or_404(Customer, id=id)
     if request.method == "POST":
-        number = request.POST.get("number")
+        number = request.POST.get("phone_number")
         message = request.POST.get("message")
         type = request.POST.get("emailtype")
-        print("its working")
+        # print("its working")
         try:
             url = request.POST.get("url")
         except:
@@ -578,7 +576,7 @@ def send_whatsapp(request, id):
                         "HX-Trigger": json.dumps(
                             {
                                 "noteChange": None,
-                                "showMessage": f"Message sent to {customer.company}",
+                                "showMessage": f"Message sent to {customer.clinic_or_hosbital_name}",
                                 "close": "close",
                                 "type": "bg-success",
                             }
@@ -607,7 +605,7 @@ def send_whatsapp(request, id):
                         "HX-Trigger": json.dumps(
                             {
                                 "noteChange": None,
-                                "showMessage": f"Message sent to {customer.company}",
+                                "showMessage": f"Message sent to {customer.clinic_or_hosbital_name}",
                                 "close": "close",
                                 "type": "bg-success",
                             }
@@ -636,7 +634,7 @@ def send_whatsapp(request, id):
                         "HX-Trigger": json.dumps(
                             {
                                 "noteChange": None,
-                                "showMessage": f"Message sent to {customer.company}",
+                                "showMessage": f"Message sent to {customer.clinic_or_hosbital_name}",
                                 "close": "close",
                                 "type": "bg-success",
                             }
@@ -665,7 +663,7 @@ def send_whatsapp(request, id):
                         "HX-Trigger": json.dumps(
                             {
                                 "noteChange": None,
-                                "showMessage": f"Message sent to {customer.company}",
+                                "showMessage": f"Message sent to {customer.clinic_or_hosbital_name}",
                                 "close": "close",
                                 "type": "bg-success",
                             }
@@ -698,8 +696,10 @@ def send_whatsapp(request, id):
                     )
                 },
             )
+    phone_select = PhoneSelectForm(company_id=customer.id)
     context = {
         "customer": customer,
+        "phone_select": phone_select,
     }
     return render(request, "crm/send_whatsapp.html", context)
 
