@@ -955,3 +955,12 @@ def send_show_temp_whatsapp(request):
     template = Whatsapp_Template.objects.get(pk=id)
     context = {"title": "Whatsapp Settings", "template": template}
     return render(request, "crm/send_show_temp_whatsapp.html", context)
+
+
+########## New Reuests #################
+
+
+def new_system_requets(request):
+    
+    context = {"title": "New System Requets"}
+    return render(request, "crm/new_system_requets.html", context)

@@ -70,3 +70,63 @@ admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Industry)
 admin.site.register(Whatsapp_Template)
 admin.site.register(Whatsapp_Messages)
+
+
+class RequestClinicSystemPackageAdmin(admin.ModelAdmin):
+    list_display = [
+        "name",
+        "phone_number",
+        "email",
+        "clinic_count",
+        "departement_count",
+        "doctors_count",
+        "users_count",
+        "details",
+        "date",
+    ]
+    list_filter = [
+        "name",
+        "phone_number",
+        "email",
+        "clinic_count",
+        "departement_count",
+        "doctors_count",
+        "users_count",
+        "details",
+        "date",
+    ]
+
+
+admin.site.register(RequestClinicSystemPackage, RequestClinicSystemPackageAdmin)
+
+
+class RequestHospitalSystemPackageAdmin(admin.ModelAdmin):
+    list_display = [
+        "title",
+        "name",
+        "hosbital",
+        "phone_number",
+        "email",
+        "hospital_beds_count",
+        "departement_count",
+        "doctors_count",
+        "users_count",
+        "details",
+        "date",
+    ]
+    list_display = [
+        "title",
+        "name",
+        "hosbital",
+        "phone_number",
+        "email",
+        "hospital_beds_count",
+        "departement_count",
+        "doctors_count",
+        "users_count",
+        "details",
+        "date",
+    ]
+
+
+admin.site.register(RequestHospitalSystemPackage, RequestHospitalSystemPackageAdmin)

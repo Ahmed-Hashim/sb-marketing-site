@@ -142,3 +142,34 @@ class Whatsapp_Messages(models.Model):
 
     def __str__(self):
         return f"{self.date}-{self.company}"
+
+
+class RequestClinicSystemPackage(models.Model):
+    name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=20)
+    email = models.EmailField()
+    clinic_count = models.PositiveIntegerField()
+    departement_count = models.PositiveIntegerField()
+    doctors_count = models.PositiveIntegerField()
+    users_count = models.PositiveIntegerField()
+    details = models.TextField(blank=True, null=True)
+    date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "{} - {} - {} - {}".format(
+            self.name, self.phone_number, self.clinic_count, self.date
+        )
+
+
+class RequestHospitalSystemPackage(models.Model):
+    name = models.CharField(max_length=100, blank=False, null=False)
+    title = models.CharField(max_length=100, blank=False, null=False)
+    hosbital = models.CharField(max_length=120, blank=False, null=False)
+    phone_number = models.CharField(max_length=20, blank=False, null=False)
+    email = models.EmailField(blank=True, null=True)
+    hospital_beds_count = models.PositiveIntegerField(blank=False, null=False)
+    departement_count = models.PositiveIntegerField(blank=False, null=False)
+    doctors_count = models.PositiveIntegerField(blank=False, null=False)
+    users_count = models.PositiveIntegerField(blank=False, null=False)
+    details = models.TextField(blank=True, null=True)
+    date = models.DateTimeField(auto_now=True)

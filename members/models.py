@@ -8,47 +8,51 @@ from django.db.models import UniqueConstraint
 
 # Create your models here.
 GENDER = (
-    ('Male', 'Male'),
-    ('Female', 'Female'),
+    ("Male", "Male"),
+    ("Female", "Female"),
 )
 COUNTIERS = (
-    ('Algeria', 'Algeria'),
-    ('Bahrain', 'Bahrain'),
-    ('Comoros', 'Comoros'),
-    ('Djibouti', 'Djibouti'),
-    ('Egypt', 'Egypt'),
-    ('Iraq', 'Iraq'),
-    ('Jordan', 'Jordan'),
-    ('Kuwait', 'Kuwait'),
-    ('Lebanon', 'Lebanon'),
-    ('Libya', 'Libya'),
-    ('Mauritania', 'Mauritania'),
-    ('Morocco', 'Morocco'),
-    ('Oman', 'Oman'),
-    ('Saudi Arabia', 'Saudi Arabia'),
-    ('Sudan', 'Sudan'),
-    ('Syria', 'Syria'),
-    ('Tunisia', 'Tunisia'),
-    ('United Arab Emirates', 'United Arab Emirates'),
-    ('Yemen', 'Yemen'),
+    ("Algeria", "Algeria"),
+    ("Bahrain", "Bahrain"),
+    ("Comoros", "Comoros"),
+    ("Djibouti", "Djibouti"),
+    ("Egypt", "Egypt"),
+    ("Iraq", "Iraq"),
+    ("Jordan", "Jordan"),
+    ("Kuwait", "Kuwait"),
+    ("Lebanon", "Lebanon"),
+    ("Libya", "Libya"),
+    ("Mauritania", "Mauritania"),
+    ("Morocco", "Morocco"),
+    ("Oman", "Oman"),
+    ("Saudi Arabia", "Saudi Arabia"),
+    ("Sudan", "Sudan"),
+    ("Syria", "Syria"),
+    ("Tunisia", "Tunisia"),
+    ("United Arab Emirates", "United Arab Emirates"),
+    ("Yemen", "Yemen"),
 )
 TIMEZONES = TIMEZONES
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(
-        User, null=True, on_delete=models.CASCADE, unique=True)
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE, unique=True)
     fullname = models.CharField(max_length=150, null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
     profile_pic = ResizedImageField(
-        force_format="WEBP", quality=80, null=True, blank=True, upload_to="images/profile/", default='images/profile/default-profile.jpg')
+        force_format="WEBP",
+        quality=80,
+        null=True,
+        blank=True,
+        upload_to="images/profile/",
+        default="images/profile/default-profile.jpg",
+    )
     phone_number = models.CharField(max_length=20, null=True, blank=True)
-    gender = models.CharField(
-        max_length=10, choices=GENDER, null=True, blank=True)
-    country = models.CharField(
-        max_length=25, choices=COUNTIERS, null=True, blank=True)
+    gender = models.CharField(max_length=10, choices=GENDER, null=True, blank=True)
+    country = models.CharField(max_length=25, choices=COUNTIERS, null=True, blank=True)
     timezone = models.CharField(
-        max_length=100, choices=TIMEZONES, null=True, blank=True)
+        max_length=100, choices=TIMEZONES, null=True, blank=True
+    )
     address = models.CharField(max_length=150, null=True, blank=True)
     facebook_url = models.CharField(max_length=150, null=True, blank=True)
     instagram_url = models.CharField(max_length=150, null=True, blank=True)
@@ -69,8 +73,8 @@ class Profile(models.Model):
 
 
 def create_profile(sender, **kwargs):
-    if kwargs['created']:
-        Profile.objects.create(user=kwargs['instance'])
+    if kwargs["created"]:
+        Profile.objects.create(user=kwargs["instance"])
 
 
 post_save.connect(create_profile, sender=User)
@@ -78,15 +82,16 @@ post_save.connect(create_profile, sender=User)
 
 class Chat(models.Model):
     user1 = models.ForeignKey(
-        Profile, related_name="user1_chats", on_delete=models.DO_NOTHING)
+        Profile, related_name="user1_chats", on_delete=models.DO_NOTHING
+    )
     user2 = models.ForeignKey(
-        Profile, related_name="user2_chats", on_delete=models.DO_NOTHING)
+        Profile, related_name="user2_chats", on_delete=models.DO_NOTHING
+    )
 
     class Meta:
         constraints = [
             UniqueConstraint(
-                fields=['user1', 'user2'],
-                name='unique_chat_between_users'
+                fields=["user1", "user2"], name="unique_chat_between_users"
             )
         ]
 
@@ -122,4 +127,5 @@ class AppDownLoad(models.Model):
     class Meta:
         verbose_name = "App Download"
         verbose_name_plural = "App Downloads"
+
 

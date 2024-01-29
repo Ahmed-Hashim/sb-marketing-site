@@ -1,0 +1,29 @@
+POST http://localhost:8000/en/crm/api/addclinicr/ 
+Content-Type: application/json
+
+{
+    "name": "mada",
+    "phone_number": "01221176956",
+    "email": "ah.abolaban@gmail.com",
+    "departement_count": "1",
+    "doctors_count": "2",
+    "clinic_count": "2",
+    "users_count": "3",
+    "details": "adas"
+}
+
+POST http://localhost:8000/en/crm/api/addhosbitalr/ 
+Content-Type: application/json
+
+{
+    "name": "mada",
+    "title": "dr",
+    "hosbital": "hsm",
+    "phone_number": "01025182582",
+    "email": "ah.abo@gmail.com",
+    "hospital_beds_count": "3",
+    "departement_count": "4",
+    "doctors_count": "5",
+    "users_count": "6",
+    "details": "str"
+}
