@@ -961,6 +961,9 @@ def send_show_temp_whatsapp(request):
 
 
 def new_system_requets(request):
-    
-    context = {"title": "New System Requets"}
+    customers = RequestClinicSystemPackage.objects.all()
+    context = {
+        "title": "New System Requets",
+        "customers": customers,
+    }
     return render(request, "crm/new_system_requets.html", context)
