@@ -10,11 +10,6 @@ from .schemas import (
 app = NinjaAPI()
 
 
-@app.get("/rclinics/", response=list[RequestClinicSystemPackageSchema])
-def get_rclinics(request):
-    return RequestClinicSystemPackage.objects.all()
-
-
 @app.post("/addclinicr/")
 def create_request_c(request, payload: ClinicIn):
     clinicr = RequestClinicSystemPackage.objects.create(**payload.dict())
