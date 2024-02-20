@@ -27,8 +27,8 @@
                 <td ><a href="{% url 'client_profile' customer.id %}">{{ customer.clinic_or_hosbital_name }}</a></td>
                 <td >{{ customer.industry }}</td>
                 <td >{{ customer.lead_referral_source }}</td>
-                <td >{{ customer.land_phone_number }}</td>
-                <td >{{ customer.phone_number }}</td>
+                <td ><a href="https://api.whatsapp.com/send?phone=2{{ customer.land_phone_number }}" target="_blank">{{ customer.land_phone_number }}</a></td>
+                <td ><a href="https://api.whatsapp.com/send?phone=2{{ customer.phone_number }}" target="_blank">{{ customer.phone_number }}</a></td>
                 <td >{{ customer.email }}</td>
                   {% if "Prospect" in customer.Situation %}
                   <td style="color:#fea95e"><i class="fa-solid fa-circle-exclamation"></i>&nbsp;{{ customer.Situation }}</td>
