@@ -44,7 +44,7 @@ class Customer(models.Model):
         null=True, blank=True, choices=STATUS, default="Prospect", max_length=100
     )
     background_info = models.TextField(max_length=500, null=True, blank=True)
-    last_contact_date = models.DateTimeField(null=True, blank=True)
+    last_contact_date = models.CharField(null=True, blank=True, max_length=25)
     facebook_url = models.CharField(max_length=150, null=True, blank=True)
     instagram_url = models.CharField(max_length=150, null=True, blank=True)
     twitter_url = models.CharField(max_length=150, null=True, blank=True)

@@ -13,8 +13,8 @@
         <th style="font-size:12px;" ><i class="fa-solid fa-phone"></i>&nbsp;&nbsp;Phone</th>
         <th style="font-size:12px;" ><i class="fa-solid fa-at"></i>&nbsp;&nbsp;Email</th>
         <th style="font-size:12px;" ><i class="fa-solid fa-signal"></i>&nbsp;&nbsp;Status</th>
-        <th style="font-size:12px;" ><i class="fa-solid fa-phone-volume"></i>&nbsp;&nbsp;Last Contact</th>
-        <th style="font-size:12px;" ><i class="fa-solid fa-phone-volume"></i>&nbsp;&nbsp;Note</th>
+        <th style="font-size:12px;" ><i class="fa-solid fa-phone-volume"></i>&nbsp;&nbsp;Contact Date</th>
+        <th style="font-size:12px;" ><i class="fa-solid fa-sticky-note-o"></i>&nbsp;&nbsp;Note</th>
         <th style="font-size:12px;" ><i class="fa-solid fa-gear"></i>&nbsp;&nbsp;Actions</th>
       </tr>
     </thead>
@@ -30,9 +30,6 @@
                 <td >{{ customer.land_phone_number }}</td>
                 <td >{{ customer.phone_number }}</td>
                 <td >{{ customer.email }}</td>
-                
-
-
                   {% if "Prospect" in customer.Situation %}
                   <td style="color:#fea95e"><i class="fa-solid fa-circle-exclamation"></i>&nbsp;{{ customer.Situation }}</td>
                   {% elif "Active" in customer.Situation %}

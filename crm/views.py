@@ -177,6 +177,7 @@ def view_edit_customer(request, id):
         return render(request, "crm/show_modal.html", context)
     elif request.method == "PUT":
         data = QueryDict(request.body).dict()
+        print(data)
         form = CustomerForm(data, instance=customer)
         if form.is_valid:
             form.save()
@@ -192,6 +193,7 @@ def view_edit_customer(request, id):
                     )
                 },
             )
+        
 
 
 @login_required

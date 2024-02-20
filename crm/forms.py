@@ -28,6 +28,7 @@ class CustomerForm(ModelForm):
             "skype_url",
             "land_phone_number",
             "phone_number",
+            "last_contact_date",
         )
         labels = {
             "clinic_or_hosbital_name": "Clinic / Hosbital",
@@ -55,6 +56,7 @@ class CustomerForm(ModelForm):
             "twitter_url": forms.TextInput(attrs={"class": "form-control"}),
             "linkedin_url": forms.TextInput(attrs={"class": "form-control"}),
             "skype_url": forms.TextInput(attrs={"class": "form-control"}),
+            "last_contact_date": forms.TextInput(attrs={"class": "form-control"}),
             "land_phone_number": forms.TextInput(
                 attrs={"class": "form-control", "required": "required"}
             ),
