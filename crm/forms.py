@@ -32,6 +32,7 @@ class CustomerForm(ModelForm):
         )
         labels = {
             "clinic_or_hosbital_name": "Clinic / Hosbital",
+            "last_contact_date": "Meeting Data",
         }
 
         widgets = {

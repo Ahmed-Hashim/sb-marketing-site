@@ -21,8 +21,11 @@
       </div>
 
       <div class="row">
-        <div class="col-12">
+        <div class="col-9">
           {{form.lead_referral_source | as_crispy_field}}
+        </div>
+        <div class="col-3 ">
+            {{form.last_contact_date | as_crispy_field}}
         </div>
       </div>
       <div class="row">{{form.background_info | as_crispy_field}}</div>

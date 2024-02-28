@@ -1,9 +1,9 @@
 # from ipware import get_client_ip
 # import requests
-#from ip2geotools.databases.noncommercial import DbIpCity
+# from ip2geotools.databases.noncommercial import DbIpCity
 from .models import AppDownLoad, Profile, Chat, Messege
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib import messages
@@ -20,7 +20,7 @@ from django.http import HttpResponseRedirect
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 
 class PasswordsChangeView(SuccessMessageMixin, PasswordChangeView):
@@ -73,6 +73,15 @@ def profile(request):
     return render(request, "registration/profile.html", context)
 
 
+def veiw_profile(request, id):
+    profile = get_object_or_404(Profile, id=id)
+    context = {
+        "profile": profile,
+        "title": "Profile",
+    }
+    return render(request, "profiles/view_profile.html", context)
+
+
 @login_required
 def settings(request):
     user = request.user
@@ -98,8 +107,7 @@ def settings(request):
 
 @login_required
 def changeProfileImage(request):
-    form = ImageChageForm(request.POST, request.FILES,
-                          instance=request.user.profile)
+    form = ImageChageForm(request.POST, request.FILES, instance=request.user.profile)
 
     if request.method == "POST":
         if form.is_valid():
@@ -134,10 +142,9 @@ def mainchat(request, id):
     user_admin = request.user.profile
     user2 = Profile.objects.get(id=id)
     chat = Chat.objects.get(id=get_or_create_chat(user_admin.id, id))
-    messages = Messege.objects.filter(chat=chat).order_by('timestamp')
+    messages = Messege.objects.filter(chat=chat).order_by("timestamp")
 
     context = {
-
         "user_admin": user_admin,
         "user2": user2,
         "messages": messages,  # Pass the chat messages to the template
@@ -149,11 +156,11 @@ def get_group_name(user1, user2):
     my_id = user1
     other_user_id = user2
     if int(other_user_id) > int(my_id):
-        room_name = f'{my_id}-{other_user_id}'
+        room_name = f"{my_id}-{other_user_id}"
     else:
-        room_name = f'{other_user_id}-{my_id}'
+        room_name = f"{other_user_id}-{my_id}"
 
-    room_group_name = 'chat_%s' % room_name
+    room_group_name = "chat_%s" % room_name
     return room_group_name
 
 
@@ -169,7 +176,7 @@ def get_or_create_chat(user1, user2):
         return chat1.id
     elif chat2:
         # If a chat exists in the opposite direction, redirect to that chat's page or do whatever you want
-        return chat2 .id
+        return chat2.id
     else:
         # If no chat exists, create a new chat and redirect to it
         if int(user2.id) > int(user1.id):
@@ -183,55 +190,79 @@ def get_or_create_chat(user1, user2):
 def download_app(request):
     client_ip = request.META.get("HTTP_X_FORWARDED_FOR")
     if client_ip is not None:
-        ip = client_ip.split(',')[0]
+        ip = client_ip.split(",")[0]
     else:
-        ip = request.META.get('REMOTE_ADDR')
-    user_agent = request.META.get('HTTP_USER_AGENT', '')
+        ip = request.META.get("REMOTE_ADDR")
+    user_agent = request.META.get("HTTP_USER_AGENT", "")
     parsed_agent = httpagentparser.detect(user_agent)
     # Check if it's an iPhone
-    if 'iPhone' in user_agent:
-        device_type = 'iPhone'
+    if "iPhone" in user_agent:
+        device_type = "iPhone"
         try:
             try:
-                response = DbIpCity.get(ip, api_key='free')
+                response = DbIpCity.get(ip, api_key="free")
             except:
-                response = {"city": "NotExist",
-                            "country": "NotExist", "regoin": "NotExist"}
+                response = {
+                    "city": "NotExist",
+                    "country": "NotExist",
+                    "regoin": "NotExist",
+                }
             AppDownLoad.objects.create(
-                device_ip=ip, city=response.city, country=response.country, regoin=response.region, deviceType=device_type)
+                device_ip=ip,
+                city=response.city,
+                country=response.country,
+                regoin=response.region,
+                deviceType=device_type,
+            )
         except:
             print("Already Exsit")
 
         # print(user_agent)
         return HttpResponseRedirect(env("IOS_URL"))
     # Check if it's an Android device
-    elif 'Android' in user_agent:
-        device_type = 'Android'
+    elif "Android" in user_agent:
+        device_type = "Android"
         try:
             try:
-                response = DbIpCity.get(ip, api_key='free')
+                response = DbIpCity.get(ip, api_key="free")
             except:
-                response = {"city": "NotExist",
-                            "country": "NotExist", "regoin": "NotExist"}
+                response = {
+                    "city": "NotExist",
+                    "country": "NotExist",
+                    "regoin": "NotExist",
+                }
             AppDownLoad.objects.create(
-                device_ip=ip, city=response.city, country=response.country, regoin=response.region, deviceType=device_type)
+                device_ip=ip,
+                city=response.city,
+                country=response.country,
+                regoin=response.region,
+                deviceType=device_type,
+            )
         except:
             pass
         # print(user_agent)
         return HttpResponseRedirect(env("ANDRIOD_URL"))
     else:
-        if parsed_agent.get('os', '')["name"] :
-            device_type = parsed_agent.get('os', '')["name"]
-        else :
+        if parsed_agent.get("os", "")["name"]:
+            device_type = parsed_agent.get("os", "")["name"]
+        else:
             device_type = "UnKnown"
         try:
             try:
-                response = DbIpCity.get(ip, api_key='free')
+                response = DbIpCity.get(ip, api_key="free")
             except:
-                response = {"city": "NotExist",
-                            "country": "NotExist", "regoin": "NotExist"}
+                response = {
+                    "city": "NotExist",
+                    "country": "NotExist",
+                    "regoin": "NotExist",
+                }
             AppDownLoad.objects.create(
-                device_ip=ip, city=response.city, country=response.country, regoin=response.region, deviceType=device_type)
+                device_ip=ip,
+                city=response.city,
+                country=response.country,
+                regoin=response.region,
+                deviceType=device_type,
+            )
         except:
             pass
         # print(user_agent)

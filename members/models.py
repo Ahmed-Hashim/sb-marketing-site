@@ -39,6 +39,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE, unique=True)
     fullname = models.CharField(max_length=150, null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
+    position = models.CharField(max_length=150, null=True, blank=True)
     profile_pic = ResizedImageField(
         force_format="WEBP",
         quality=80,
@@ -127,5 +128,3 @@ class AppDownLoad(models.Model):
     class Meta:
         verbose_name = "App Download"
         verbose_name_plural = "App Downloads"
-
-
