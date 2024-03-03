@@ -54,6 +54,24 @@ def customerlist(request):
 
 @login_required
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
+def calender(request):
+    current_user = request.user.profile
+
+    # Get the current date
+    current_date = timezone.now().date()
+
+    # Retrieve Customer objects for the current user with date_to_meeting equal to the current date
+    current_user_meetings = Customer.objects.filter(
+        assigend_to=current_user, date_to_meeting=current_date
+    ).order_by("time_date_to_meeting")
+
+    context = {"current_user_meetings": current_user_meetings, "title": "My Schedule"}
+
+    return render(request, "crm/calender.html", context)
+
+
+@login_required
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @require_http_methods(["POST"])
 def AddClient(request):
     if request.method == "POST":
@@ -193,7 +211,6 @@ def view_edit_customer(request, id):
                     )
                 },
             )
-        
 
 
 @login_required

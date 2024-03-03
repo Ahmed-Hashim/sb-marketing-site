@@ -29,10 +29,14 @@ class CustomerForm(ModelForm):
             "land_phone_number",
             "phone_number",
             "last_contact_date",
+            "time_date_to_meeting",
+            "date_to_meeting",
+            "assigend_to",
         )
         labels = {
             "clinic_or_hosbital_name": "Clinic / Hosbital",
             "last_contact_date": "Meeting Data",
+            "date_to_meeting": "Meeting",
         }
 
         widgets = {
@@ -58,6 +62,13 @@ class CustomerForm(ModelForm):
             "linkedin_url": forms.TextInput(attrs={"class": "form-control"}),
             "skype_url": forms.TextInput(attrs={"class": "form-control"}),
             "last_contact_date": forms.TextInput(attrs={"class": "form-control"}),
+            "assigend_to": forms.Select(attrs={"class": "form-control"}),
+            "date_to_meeting": forms.DateInput(
+                attrs={"class": "form-control", "type": "date"}
+            ),
+            "time_date_to_meeting": forms.TimeInput(
+                attrs={"class": "form-control", "type": "time"}
+            ),
             "land_phone_number": forms.TextInput(
                 attrs={"class": "form-control", "required": "required"}
             ),

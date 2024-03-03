@@ -55,8 +55,13 @@
                 <p>{{customer.background_info}}</p> 
                 </div>
                 <div class="col-6">
-                <h6>Meeting Date</h6>
+                <h6>Available Time</h6>
                 <p>{{customer.last_contact_date}}</p> 
+                <hr>
+                <h6>Meeting Info</h6>
+                <p>{{customer.date_to_meeting}}</p>
+                <p>{{customer.time_date_to_meeting}}</p>
+                <p>{{customer.assigend_to}}</p>
                 </div>
               </div>
               <hr class="profile-social">
@@ -231,13 +236,24 @@
                   </div>
                 </div>
                 <div class="row mt-2">
-                  <div class="col-9 mb-3">
+                  <div class="col-6 mb-3">
                     <h6 class="mb-1">Background Info</h6>
                     {{edit_form.background_info}}
                   </div>
                   <div class="col-3 mb-3">
-                    <h6 class="mb-1">Meeting Date</h6>
-                    {{edit_form.last_contact_date}}
+                    <h6 class="mb-1">Available Time</h6>
+                    {{edit_form.last_contact_date}}                   
+                  </div>
+                  <div class="col-3 mb-3">
+                    <h6 class="mb-1">Assinged to</h6>
+                    {{edit_form.assigend_to}}
+                    <hr>
+                    <h6 class="mb-1">Date</h6>
+                    {{edit_form.date_to_meeting}}
+                    <hr>
+                    <h6 class="mb-1">Time</h6>
+                    {{edit_form.time_date_to_meeting}}
+                    
                   </div>
                 </div>
                 <div class="row bg-secondary p-2 mb-3">

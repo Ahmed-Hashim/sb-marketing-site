@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 from .fields import NonStrippingTextField
-
+from members.models import Profile
 GENDER = (
     ("Male", "Male"),
     ("Female", "Female"),
@@ -40,6 +40,11 @@ class Customer(models.Model):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     email = models.CharField(max_length=120, null=True, blank=True)
     website = models.CharField(max_length=190, null=True, blank=True)
+    date_to_meeting = models.DateField(null=True, blank=True)
+    time_date_to_meeting = models.TimeField(null=True, blank=True)
+    assigend_to = models.ForeignKey(
+        Profile, on_delete=models.DO_NOTHING, null=True, blank=True
+    )
     Situation = models.CharField(
         null=True, blank=True, choices=STATUS, default="Prospect", max_length=100
     )

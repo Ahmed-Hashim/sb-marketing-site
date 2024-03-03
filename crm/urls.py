@@ -70,5 +70,6 @@ urlpatterns = [
     ###################### New Requests URLS ################
     ###################################################################
     path("new_system_requets", views.new_system_requets, name="new_system_requets"),
-    path("api/",app.urls)
+    path("calender", views.calender, name="calender"),
+    path("api/", app.urls),
 ]
