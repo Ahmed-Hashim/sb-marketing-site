@@ -30,7 +30,7 @@
                 <td ><a href="https://api.whatsapp.com/send?phone=2{{ customer.land_phone_number }}" target="_blank">{{ customer.land_phone_number }}</a></td>
                 <td ><a href="https://api.whatsapp.com/send?phone=2{{ customer.phone_number }}" target="_blank">{{ customer.phone_number }}</a></td>
                 <td >{{ customer.date_to_meeting }}-{{ customer.time_date_to_meeting }}</td>
-                <td style="font-size:9px;">{{ customer.last_contact_date }}</td>
+                <td style="font-size:9px;">{{ customer.assigend_to }}</td>
                 <td >{{ customer.background_info }}</td>
                   {% if "Prospect" in customer.Situation %}
                   <td style="color:#fea95e"><i class="fa-solid fa-circle-exclamation"></i>&nbsp;{{ customer.Situation }}</td>
