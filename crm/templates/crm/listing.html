@@ -26,7 +26,6 @@
                 <td >{{ customer.id }}</td>
                 <td ><a href="{% url 'client_profile' customer.id %}">{{ customer.clinic_or_hosbital_name }}</a></td>
                 <td >{{ customer.industry }}</td>
-                <td >{{ customer.lead_referral_source }}</td>
                 <td ><a href="https://api.whatsapp.com/send?phone=2{{ customer.land_phone_number }}" target="_blank">{{ customer.land_phone_number }}</a></td>
                 <td ><a href="https://api.whatsapp.com/send?phone=2{{ customer.phone_number }}" target="_blank">{{ customer.phone_number }}</a></td>
                 <td >{{ customer.assigend_to }}</td>
