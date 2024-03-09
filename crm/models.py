@@ -56,7 +56,10 @@ class Customer(models.Model):
     linkedin_url = models.CharField(max_length=150, null=True, blank=True)
     skype_url = models.CharField(max_length=150, null=True, blank=True)
     slug = models.SlugField(("slug"), blank=True, null=True)
-
+    added_by = models.ForeignKey(
+        User, on_delete=models.DO_NOTHING, null=True, blank=True
+    )
+    created_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.clinic_or_hosbital_name
 

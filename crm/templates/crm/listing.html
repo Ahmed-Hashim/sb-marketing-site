@@ -22,16 +22,16 @@
 
          {% if customers %}
         {% for customer in customers %}
-              <tr style="cursor:pointer" role="row">
+              <tr id="{{customer.id}}" style="cursor:pointer" role="row">
                 <td >{{ customer.id }}</td>
-                <td ><a href="{% url 'client_profile' customer.id %}">{{ customer.clinic_or_hosbital_name }}</a></td>
-                <td >{{ customer.industry }}</td>
-                <td ><a href="https://api.whatsapp.com/send?phone=2{{ customer.land_phone_number }}" target="_blank">{{ customer.land_phone_number }}</a></td>
-                <td ><a href="https://api.whatsapp.com/send?phone=2{{ customer.phone_number }}" target="_blank">{{ customer.phone_number }}</a></td>
-                <td style="font-size:9px;">{{ customer.date_to_meeting }}-{{ customer.time_date_to_meeting }}</td>
-                <td >{{ customer.assigend_to }}</td>
-                <td style="font-size:9px;">{{ customer.last_contact_date}}</td>
-                <td >{{ customer.background_info }}</td>
+                <td ><a id="name-{{customer.id}}" href="{% url 'client_profile' customer.id %}">{{ customer.clinic_or_hosbital_name }}</a></td>
+                <td id="industry-{{customer.id}}">{{ customer.industry }}</td>
+                <td ><a id="land-{{customer.id}}" href="https://api.whatsapp.com/send?phone=2{{ customer.land_phone_number }}" target="_blank">{{ customer.land_phone_number }}</a></td>
+                <td ><a id="phone-{{customer.id}}" href="https://api.whatsapp.com/send?phone=2{{ customer.phone_number }}" target="_blank">{{ customer.phone_number }}</a></td>
+                <td id="date-{{customer.id}}" style="font-size:9px;">{{ customer.date_to_meeting }}-{{ customer.time_date_to_meeting }}</td>
+                <td id="assigend-{{customer.id}}">{{ customer.assigend_to }}</td>
+                <td id="contact-{{customer.id}}" style="font-size:9px;">{{ customer.last_contact_date}}</td>
+                <td id="bg-{{customer.id}}" >{{ customer.background_info }}</td>
                   {% if "Prospect" in customer.Situation %}
                   <td style="color:#fea95e"><i class="fa-solid fa-circle-exclamation"></i>&nbsp;{{ customer.Situation }}</td>
                   {% elif "Active" in customer.Situation %}
@@ -86,7 +86,7 @@
           className:'btn btn-secondary',
           titleAttr:'Copy',
           exportOptions:{
-            columns:[0,1,2,3,4,5,6,7]
+            columns:[0,1,2,3,4,5,6,7,8]
           }
         },
         {
@@ -95,7 +95,7 @@
           className:'btn btn-secondary',
           titleAttr:'PDF',
           exportOptions:{
-            columns:[0,1,2,3,4,5,6,7]
+            columns:[0,1,2,3,4,5,6,7,8]
           },
           tableHeader:{
             alignment:'center'
@@ -116,7 +116,7 @@
           className:'btn btn-secondary',
           titleAttr:'Print',
           exportOptions:{
-            columns:[0,1,2,3,4,5,6,7]
+            columns:[0,1,2,3,4,5,6,7,8]
           },
           customize:function ( win ){
             $(win.document.body).css('font-size','10pt')
@@ -131,7 +131,7 @@
           className:'btn btn-secondary',
           titleAttr:'Excel',
           exportOptions:{
-            columns:[0,1,2,3,4,5,6,7]
+            columns:[0,1,2,3,4,5,6,7,8]
           }
         },
       ]

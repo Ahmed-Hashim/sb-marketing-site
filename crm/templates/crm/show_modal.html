@@ -200,7 +200,7 @@
                 <h5 class="modal-tilte text-light"><i class="fa-solid fa-user-pen"></i>&nbsp;&nbsp;Edit @{{ customer.slug }}</h5>
             </div>
               
-            <form hx-put="view_edit_customer/p={{customer.id}}" autocomplete="off" novalidate>
+            <form hx-put="view_edit_customer/p={{ customer.pk }}" id="edit-form" autocomplete="off" novalidate>
               <div class="card-body">
                 <div class="row">
                   <div class="col-3">
@@ -364,8 +364,30 @@
                           };
                 html2pdf(element)
           })
-             
-          
-          
+                  
           
           </script>
+<script>
+  htmx.on("serialized_customer", (e) => {
+        const editForm = document.getElementById('edit-form');
+        const timeInputValue = "17:49:00"; // Example time value
+        const [hours, minutes, seconds] = timeInputValue.split(':').map(part => parseInt(part));
+        let formattedTime;
+
+        if (!isNaN(hours) && !isNaN(minutes) && !isNaN(seconds)) {
+            const timeToMeeting = new Date();
+            timeToMeeting.setHours(hours, minutes, seconds);
+            formattedTime = timeToMeeting.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+        } else {
+            formattedTime = "Invalid Time Format";
+        }
+        document.getElementById('name-{{customer.id}}').innerText = editForm.querySelector('[name="clinic_or_hosbital_name"]').value;
+        document.getElementById('industry-{{customer.id}}').innerText = editForm.querySelector('[name="industry"]').value;
+        document.getElementById('land-{{customer.id}}').innerText = editForm.querySelector('[name="land_phone_number"]').value;
+        document.getElementById('phone-{{customer.id}}').innerText = editForm.querySelector('[name="phone_number"]').value;
+        document.getElementById('date-{{customer.id}}').innerText = editForm.querySelector('[name="date_to_meeting"]').value + " " + formattedTime
+        document.getElementById('assigend-{{customer.id}}').innerText = editForm.querySelector('[name="assigend_to"]').selectedOptions[0].innerText;
+        document.getElementById('contact-{{customer.id}}').innerText = editForm.querySelector('[name="last_contact_date"]').value;
+        document.getElementById('bg-{{customer.id}}').innerText = editForm.querySelector('[name="background_info"]').value;
+    });
+</script>

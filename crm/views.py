@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.views.decorators.cache import cache_control
 from django.core.paginator import Paginator, EmptyPage
-
+from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.http import QueryDict
@@ -77,7 +77,9 @@ def AddClient(request):
     if request.method == "POST":
         form = CustomerForm(request.POST)
         if form.is_valid():
-            form.save()
+            customer = form.save(commit=False)
+            customer.added_by = request.user
+            customer.save()
             messages.success(
                 request, f"{Customer.objects.first()} Has been added to client list"
             )
@@ -195,18 +197,31 @@ def view_edit_customer(request, id):
         return render(request, "crm/show_modal.html", context)
     elif request.method == "PUT":
         data = QueryDict(request.body).dict()
-        print(data)
         form = CustomerForm(data, instance=customer)
-        if form.is_valid:
+        if form.is_valid():
             form.save()
-            return HttpResponse(
+            serialized_customer = {
+                "id": customer.id,
+                "clinic_or_hosbital_name": customer.clinic_or_hosbital_name,
+                "industry": customer.industry,
+                "land_phone_number": customer.land_phone_number,
+                "phone_number": customer.phone_number,
+                "date_to_meeting": customer.date_to_meeting,
+                "time_date_to_meeting": customer.time_date_to_meeting,
+                "assigend_to": customer.assigend_to.id,  # Change here to access the foreign key ID
+                "last_contact_date": customer.last_contact_date,
+                "background_info": customer.background_info,
+                "Situation": customer.Situation,
+            }
+            return JsonResponse(
+                serialized_customer,
                 status=204,
                 headers={
                     "HX-Trigger": json.dumps(
                         {
-                            "crmChange": None,
                             "showMessage": f"{customer.clinic_or_hosbital_name} details has been edited successfully.",
                             "type": "bg-success",
+                            "serialized_customer": None,
                         }
                     )
                 },
